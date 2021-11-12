@@ -8,4 +8,4 @@ services:
       - ./:/application
     command: ["npm","run","dev"]
     environment:
-      - TOKEN=OTA2OTg3Nzg2NzAyMjk1MTEy.YYgoMw.NO64jWk1AFSvG_iZxgz6qgqDzMg
+      - TOKEN=$TOKEN
