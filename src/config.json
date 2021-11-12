@@ -1,0 +1,71 @@
+[
+  {
+    "idGuild": "905784636389593130",
+    "regionName": "Coulées de Lave",
+    "color": "#EF8B03",
+    "role": {
+      "valide": "905784636758687799",
+      "region": {
+        "Coulées de Lave": "908483264690417685",
+        "autre": "905888488065478657"
+      }
+    },
+    "channel": {
+      "public": "906167117286621204",
+      "log": "908484239782203423"
+    },
+    "coordonneFix": {},
+    "time": 10000,
+    "reaction": {
+      "positif": "💚",
+      "negatif": "❌"
+    }
+  },
+  {
+    "idGuild": "905024934517047307",
+    "regionName": "Coeur historique",
+    "color": "#3EB6B7",
+    "role": {
+      "valide": "906991307069718570",
+      "region": {
+        "Coeur historique": "906992272753696838",
+        "Crashapagos": "906991362551992320",
+        "autre": "906993680626360321"
+      }
+    },
+    "channel": {
+      "public": "907998637303431198",
+      "log": "907755509472428062"
+    },
+    "coordonneFix": {
+      "181198354712231936": { "x": 35, "y": 210 }
+    },
+    "time": 10000,
+    "reaction": {
+      "positif": "💚",
+      "negatif": "❌"
+    }
+  },
+  {
+    "idGuild": "905825641100877844",
+    "regionName": "Terre des Mirages",
+    "color": "#FFD300",
+    "role": {
+      "valide": "908394369885818880",
+      "region": {
+        "Terre des Mirages": "908411640930779196",
+        "autre": "905912130681839662"
+      }
+    },
+    "channel": {
+      "public": "906633910455267388",
+      "log": "906203564177780797"
+    },
+    "coordonneFix": {},
+    "time": 10000,
+    "reaction": {
+      "positif": "💚",
+      "negatif": "❌"
+    }
+  }
+]
