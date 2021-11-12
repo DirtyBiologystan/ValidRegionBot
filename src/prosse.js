@@ -58,7 +58,7 @@ processEvent.on("config",async (config) => {
           } else {
             await discord.addRole(
               member,
-              config.role.departement[config.regionName] || config.role.region[config.regionName],
+              config.role.region[config.regionName],
               allrole,
               channel_log
             );
