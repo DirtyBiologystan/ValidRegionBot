@@ -45,7 +45,6 @@ module.exports = {
   getMemberByCoordonne: async (guildId, x, y) => {
     const guild = await (await module.exports.client).guilds.fetch(guildId);
     let members = await guild.members.fetch();
-    console.log(members.length);
     members = members.filter((member) => !member.user.bot);
     return members.find((member) => {
       const coordonne = reg.exec(

@@ -113,7 +113,6 @@ processEvent.on("config",async (config) => {
     setInterval(async () => {
       try {
         let members = await guild.members.fetch();
-        console.log(members.length);
         members = members.filter((member) => !member.user.bot);
 
         let membersPars = members.map((member) => {
