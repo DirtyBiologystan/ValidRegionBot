@@ -39,9 +39,9 @@ processEvent.on("config",async (config) => {
             pixel.y
           );
           if (pixel.hexColor === config.color) {
-            await channel.send(
+            await (await channel.send(
               `${member ? (member.nickname ? member.nickname : member.user.username) : `[${pixel.x}:${pixel.y}]`} arbore nos couleurs !`
-            );
+            )).react(config.reaction.positif);
             await discord.addRole(member, config.role.valide, allrole, channel_log);
             return;
           } else if (pixel.oldHexColor === config.color) {
