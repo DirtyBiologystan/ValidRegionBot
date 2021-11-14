@@ -35,9 +35,30 @@ processEvent.on("config", async (config) => {
           if (member) {
             await (
               await channel.send(
-                `<@${member.id}>! ton pixel a été changé de couleur!`
+                `${member.nickname
+                  ? member.nickname
+                  : member.user.username}! ton pixel a été changé de couleur!`
               )
             ).react(config.reaction.negatif);
+          }
+        }else if(pixel.hexColor === config.color){
+          const member = await discord.getMemberByCoordonne(
+            config.idGuild,
+            pixel.x,
+            pixel.y
+          );
+          if (member) {
+            await (
+              await channel.send(
+                `${
+                  member
+                    ? member.nickname
+                      ? member.nickname
+                      : member.user.username
+                    : `[${pixel.x}:${pixel.y}] arbore nos couleurs !(mais c'est pas lui qui la fait^^)`
+                }`
+              )
+            ).react(config.reaction.positif);
           }
         }
         return;
