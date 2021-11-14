@@ -25,6 +25,23 @@ processEvent.on("config", async (config) => {
     channel_log.send("I am up!");
 
     processEvent.on("changePixel", async (pixel) => {
+      if (pixel.modifier.author !== pixel.author) {
+        if (pixel.oldHexColor === config.color) {
+          const member = await discord.getMemberByCoordonne(
+            config.idGuild,
+            pixel.x,
+            pixel.y
+          );
+          if (member) {
+            await (
+              await channel.send(
+                `<@${member.id}>! ton pixel a été changé de couleur!`
+              )
+            ).react(config.reaction.negatif);
+          }
+        }
+        return;
+      }
       let [departement] = (
         await axios(`${apiURL}/departements/?x=${pixel.x}&y=${pixel.y}`)
       ).data;
