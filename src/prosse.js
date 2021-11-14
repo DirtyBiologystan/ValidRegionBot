@@ -55,8 +55,7 @@ processEvent.on("config", async (config) => {
                     ? member.nickname
                       ? member.nickname
                       : member.user.username
-                    : `[${pixel.x}:${pixel.y}] arbore nos couleurs !(mais c'est pas lui qui la fait^^)`
-                }`
+                    : `[${pixel.x}:${pixel.y}]`} arbore nos couleurs !(mais c'est pas lui qui la fait)`
               )
             ).react(config.reaction.positif);
           }
