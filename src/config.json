@@ -69,49 +69,49 @@
     }
   },
   {
-    "idGuild":"907720881139236965",
-    "regionName":"La Toundra",
-    "color":"#FF6600",
-    "role":{
-      "valide":"908629989312827423",
+    "idGuild": "907720881139236965",
+    "regionName": "La Toundra",
+    "color": "#FF6600",
+    "role": {
+      "valide": "908629989312827423",
       "region": {
         "La Toundra": "908841113404702781",
-        "Grand Sud" : "908412610284752926",
-        "Lac écarlate" : "908480302320615464",
-        "Terre des Mirages" : "908414453073207377",
-        "Forêt Abyssale" : "908618224919252992",
-        "Oasis" : "908433832523497503",
-        "Coeur historique" : "908619475241300008",
-        "Mer du Nord" : "908620616150704128",
-        "Eaux de Givrétoile" : "908625516435742720",
+        "Grand Sud": "908412610284752926",
+        "Lac écarlate": "908480302320615464",
+        "Terre des Mirages": "908414453073207377",
+        "Forêt Abyssale": "908618224919252992",
+        "Oasis": "908433832523497503",
+        "Coeur historique": "908619475241300008",
+        "Mer du Nord": "908620616150704128",
+        "Eaux de Givrétoile": "908625516435742720",
         "V.I.E": "909185440538591272",
         "Jungle": "909197320007065710",
-        "Champ du Soleil":"909198267353538590",
-        "Grande Clairière":"909196853952794676",
-        "Terres Fertiles":"909196561085526047",
-        "Terre du Kraken":"909197159851761694",
-        "Ocean Thétis":"909195322494971945",
-        "Mer du Nord":"908620616150704128",
-        "Volcan":"909196468584321146",
-        "Lac écarlate":"908480302320615464",
-        "Hautes Dunes":"909198141096620084",
-        "Coulées de Lave":"909197696890470401",
-        "Crashapagos":"909187520653324338",
-        "Salins":"909196783765323827",
-        "Plaines Fleuries":"909197783226011678",
-        "Plateaux de la Résolution":"909196307502084217",
-        "La Méridionale":"909195516330541076",
+        "Champ du Soleil": "909198267353538590",
+        "Grande Clairière": "909196853952794676",
+        "Terres Fertiles": "909196561085526047",
+        "Terre du Kraken": "909197159851761694",
+        "Ocean Thétis": "909195322494971945",
+        "Mer du Nord": "908620616150704128",
+        "Volcan": "909196468584321146",
+        "Lac écarlate": "908480302320615464",
+        "Hautes Dunes": "909198141096620084",
+        "Coulées de Lave": "909197696890470401",
+        "Crashapagos": "909187520653324338",
+        "Salins": "909196783765323827",
+        "Plaines Fleuries": "909197783226011678",
+        "Plateaux de la Résolution": "909196307502084217",
+        "La Méridionale": "909195516330541076",
         "autre": "909314217579016222"
-        }
+      }
     },
-    "channel":{
-      "public":"908839872788316251",
-      "log":"908839332507447407"
+    "channel": {
+      "public": "908839872788316251",
+      "log": "908839332507447407"
     },
-    "coordonneFix":{},
+    "coordonneFix": {},
     "time": 30000,
-    "reaction":{
-      "positif":"💚",
+    "reaction": {
+      "positif": "💚",
       "negatif": "❌"
     }
   }
