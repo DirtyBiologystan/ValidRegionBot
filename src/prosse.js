@@ -114,10 +114,13 @@ processEvent.on("config", async (config) => {
       }
     });
 
-    const q = async.queue(async ({ x, y, member }) => {
-      let [region] = (
-        await axios(`${apiURL}/departements/?x=${parseInt(x)}&y=${parseInt(y)}`)
-      ).data;
+    const q = async.queue(async ({ x, y, member, hexColor, region }) => {
+      if(region!){
+        [region] = (
+          await axios(`${apiURL}/departements/?x=${parseInt(x)}&y=${parseInt(y)}`)
+        ).data;
+      }
+
       if (region) {
         region = region.region;
       } else {
@@ -129,9 +132,11 @@ processEvent.on("config", async (config) => {
 
       let role = config.role.region[region];
       if (region === config.regionName) {
-        let { hexColor } = (
-          await axios(`${apiURL}/pixels/?x=${parseInt(x)}&y=${parseInt(y)}`)
-        ).data;
+        if(!hexColor){
+          { hexColor } = (
+            await axios(`${apiURL}/pixels/?x=${parseInt(x)}&y=${parseInt(y)}`)
+          ).data;
+        }
         if (hexColor === config.color) {
           role = config.role.valide;
         }
@@ -159,7 +164,14 @@ processEvent.on("config", async (config) => {
           );
           if (!pars) {
             console.log(member.nickname, member.user.username);
-            return false;
+            let  pixel= (
+              await axios(`${apiURL}/pixels/?idDiscord=${member.id}`)
+            ).data;
+            if(pixel){
+              return {hexColor:pixel.hexColor, x: pixel.x, y: pixel.y, member , region:pixel.departements};
+            }else{
+              return false;
+            }
           }
           return { x: pars[1], y: pars[2], member };
         });
