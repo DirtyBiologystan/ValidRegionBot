@@ -115,7 +115,7 @@ processEvent.on("config", async (config) => {
     });
 
     const q = async.queue(async ({ x, y, member, hexColor, region }) => {
-      if(region!){
+      if(!region){
         [region] = (
           await axios(`${apiURL}/departements/?x=${parseInt(x)}&y=${parseInt(y)}`)
         ).data;
@@ -133,9 +133,9 @@ processEvent.on("config", async (config) => {
       let role = config.role.region[region];
       if (region === config.regionName) {
         if(!hexColor){
-          { hexColor } = (
+          ({ hexColor } = (
             await axios(`${apiURL}/pixels/?x=${parseInt(x)}&y=${parseInt(y)}`)
-          ).data;
+          ).data);
         }
         if (hexColor === config.color) {
           role = config.role.valide;
@@ -151,7 +151,7 @@ processEvent.on("config", async (config) => {
         let members = await guild.members.fetch();
         members = members.filter((member) => !member.user.bot);
 
-        let membersPars = members.map((member) => {
+        let membersPars = await Promise.all( members.map(async (member) => {
           if (config.coordonneFix[member.id]) {
             return {
               ...config.coordonneFix[member.id],
@@ -164,17 +164,23 @@ processEvent.on("config", async (config) => {
           );
           if (!pars) {
             console.log(member.nickname, member.user.username);
-            let  pixel= (
-              await axios(`${apiURL}/pixels/?idDiscord=${member.id}`)
-            ).data;
+             let pixel
+            try {
+              pixel= (
+                await axios(`${apiURL}/pixels/?idDiscord=${member.id}`)
+              ).data;
+            } catch (e) {
+              return false;
+            }
             if(pixel){
               return {hexColor:pixel.hexColor, x: pixel.x, y: pixel.y, member , region:pixel.departements};
             }else{
               return false;
+
             }
           }
           return { x: pars[1], y: pars[2], member };
-        });
+        }));
         membersPars = membersPars.filter((membersPar) => membersPar);
         q.push(membersPars);
       } catch (e) {
