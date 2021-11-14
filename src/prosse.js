@@ -2,18 +2,18 @@ const axios = require("axios");
 const async = require("async");
 const discord = require("./service/discord");
 const processEvent = require("./service/processEvent");
-const process = require('process');
+const process = require("process");
 
 const reg = /^.*[\<[|(]\s*(\d{1,3})[:;\-\/\., ]*(\d{1,3})\s*[\]|>)].*$/;
 
-let apiURL="http://back:8000";
+let apiURL = "http://back:8000";
 
-processEvent.on("config",async (config) => {
+processEvent.on("config", async (config) => {
   try {
     let allrole = Object.values(config.role.region);
     allrole.push(config.role.valide);
 
-    console.log(config)
+    console.log(config);
     const client = await discord.client;
     const guild = await client.guilds.fetch(config.idGuild);
 
@@ -26,69 +26,85 @@ processEvent.on("config",async (config) => {
 
     processEvent.on("changePixel", async (pixel) => {
       let [departement] = (
-        await axios(
-          `${apiURL}/departements/?x=${pixel.x}&y=${pixel.y}`
-        )
+        await axios(`${apiURL}/departements/?x=${pixel.x}&y=${pixel.y}`)
       ).data;
 
       if (departement && config.regionName === departement.region) {
         // if(!config.departementName || config.departementName === departement.name){
-          const member = await discord.getMemberByCoordonne(
-            config.idGuild,
-            pixel.x,
-            pixel.y
+        const member = await discord.getMemberByCoordonne(
+          config.idGuild,
+          pixel.x,
+          pixel.y
+        );
+        if (pixel.hexColor === config.color) {
+          await (
+            await channel.send(
+              `${
+                member
+                  ? member.nickname
+                    ? member.nickname
+                    : member.user.username
+                  : `[${pixel.x}:${pixel.y}]`
+              } arbore nos couleurs !`
+            )
+          ).react(config.reaction.positif);
+          await discord.addRole(
+            member,
+            config.role.valide,
+            allrole,
+            channel_log
           );
-          if (pixel.hexColor === config.color) {
-            await (await channel.send(
-              `${member ? (member.nickname ? member.nickname : member.user.username) : `[${pixel.x}:${pixel.y}]`} arbore nos couleurs !`
-            )).react(config.reaction.positif);
-            await discord.addRole(member, config.role.valide, allrole, channel_log);
-            return;
-          } else if (pixel.oldHexColor === config.color) {
-            await discord.addRole(
-              member,
-              config.role.region[config.regionName],
-              allrole,
-              channel_log
-            );
-            await (await channel.send(
-              `${member ? `<@${member.id}>` : `[${pixel.x}:${pixel.y}]`} nous trompe pour le ${pixel.hexColor} !`
-            )).react(config.reaction.negatif);
-            return;
-          } else {
-            await discord.addRole(
-              member,
-              config.role.region[config.regionName],
-              allrole,
-              channel_log
-            );
-            return;
-          }
+          return;
+        } else if (pixel.oldHexColor === config.color) {
+          await discord.addRole(
+            member,
+            config.role.region[config.regionName],
+            allrole,
+            channel_log
+          );
+          await (
+            await channel.send(
+              `${
+                member ? `<@${member.id}>` : `[${pixel.x}:${pixel.y}]`
+              } nous trompe pour le ${pixel.hexColor} !`
+            )
+          ).react(config.reaction.negatif);
+          return;
+        } else {
+          await discord.addRole(
+            member,
+            config.role.region[config.regionName],
+            allrole,
+            channel_log
+          );
+          return;
+        }
         // }
       } else if (pixel.hexColor === config.color) {
-        if(departement){
-          await (await channel.send(
-            `[${pixel.x}:${pixel.y}] de la région "${departement.region}" ("${departement.name}") arbore notre couleur !`
-          )).react(config.reaction.positif);
-        }else{
-          await (await channel.send(
-            `[${pixel.x}:${pixel.y}] d'un territoire inconnu a adopté la bonne couleur !`
-          )).react(config.reaction.positif);
+        if (departement) {
+          await (
+            await channel.send(
+              `[${pixel.x}:${pixel.y}] de la région "${departement.region}" ("${departement.name}") arbore notre couleur !`
+            )
+          ).react(config.reaction.positif);
+        } else {
+          await (
+            await channel.send(
+              `[${pixel.x}:${pixel.y}] d'un territoire inconnu a adopté la bonne couleur !`
+            )
+          ).react(config.reaction.positif);
         }
       }
     });
 
     const q = async.queue(async ({ x, y, member }) => {
-      let [ region ] = (
-        await axios(
-          `${apiURL}/departements/?x=${parseInt(x)}&y=${parseInt(y)}`
-        )
+      let [region] = (
+        await axios(`${apiURL}/departements/?x=${parseInt(x)}&y=${parseInt(y)}`)
       ).data;
-      if(region){
+      if (region) {
         region = region.region;
-      }else{
+      } else {
         region = "autre";
-
       }
       if (!config.role.region[region]) {
         region = "autre";
@@ -97,9 +113,7 @@ processEvent.on("config",async (config) => {
       let role = config.role.region[region];
       if (region === config.regionName) {
         let { hexColor } = (
-          await axios(
-            `${apiURL}/pixels/?x=${parseInt(x)}&y=${parseInt(y)}`
-          )
+          await axios(`${apiURL}/pixels/?x=${parseInt(x)}&y=${parseInt(y)}`)
         ).data;
         if (hexColor === config.color) {
           role = config.role.valide;
@@ -139,11 +153,10 @@ processEvent.on("config",async (config) => {
       }
     }, config.time);
   } catch (e) {
-    console.error(e)
+    console.error(e);
     process.exit(1);
   }
-
-})
+});
 // 906991307069718570
 // 906992272753696838
 // 906991362551992320
