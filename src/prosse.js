@@ -47,18 +47,16 @@ processEvent.on("config", async (config) => {
             pixel.x,
             pixel.y
           );
-          if (member) {
-            await (
-              await channel.send(
-                `${
-                  member
+          await (
+            await channel.send(
+              `${
+                member
+                  ? member.nickname
                     ? member.nickname
-                      ? member.nickname
-                      : member.user.username
-                    : `[${pixel.x}:${pixel.y}]`} arbore nos couleurs !(mais c'est pas lui qui la fait)`
-              )
-            ).react(config.reaction.positif);
-          }
+                    : member.user.username
+                  : `[${pixel.x}:${pixel.y}]`} arbore nos couleurs de force!`
+            )
+          ).react(config.reaction.positif);
         }
         return;
       }
