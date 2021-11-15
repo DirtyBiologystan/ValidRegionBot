@@ -2,31 +2,70 @@ const axios = require("axios");
 const async = require("async");
 const discord = require("./service/discord");
 const processEvent = require("./service/processEvent");
+const {getNextPixel} = require("./service/image");
 const process = require("process");
 
 const reg = /^.*[\<[|(]\s*(\d{1,3})[:;\-\/\., ]*(\d{1,3})\s*[\]|>)].*$/;
 
 let apiURL = "http://back:8000";
-
+let pixelNeedChange;
 processEvent.on("config", async (config) => {
-  try {
-    let allrole = Object.values(config.role.region);
-    allrole.push(config.role.valide);
+  let image;
+  // let imageObject=[];
+  let messageOfPixel;
+  // let pixelNeedChange;
 
+  try {
     console.log(config);
     const client = await discord.client;
     const guild = await client.guilds.fetch(config.idGuild);
+    const channel = await guild.channels.cache.get(config.channel.public);
+    const channel_log = await guild.channels.cache.get(config.channel.log);
+    const channel_image = await guild.channels.cache.get(config.channel.image);
+    if(channel_image){
+      let messages=await channel_image.messages.fetch();
+      await Promise.all(
+        messages.map(async (message)=>{
+          await message.delete();
+        })
+      )
+    }
+    if(config.image){
+      image = require(`./image/${config.image}`);
+      // for (var x = 0; x < image.length; x++) {
+      //   for (var y = 0; y < image[x].length; y++) {
+      //     imageObject.push({ color:image[x][y],x,y});
+      //   }
+      // }
+
+      const pixelNeedChange = await getNextPixel(config,image,apiURL);
+      messageOfPixel= await discord.sendMessageForPixelChange(pixelNeedChange,channel_image);
+    }
+    let allrole = Object.values(config.role.region);
+    allrole.push(config.role.valide);
+
+
 
     console.log(`Logged in as ${client.user.tag} in ${guild.name}!`);
 
-    const channel = await guild.channels.cache.get(config.channel.public);
-    const channel_log = await guild.channels.cache.get(config.channel.log);
 
     channel_log.send("I am up!");
 
     processEvent.on("changePixel", async (pixel) => {
+      if(messageOfPixel && messageOfPixel[pixel.x]&& messageOfPixel[pixel.x][pixel.y]){
+        if(messageOfPixel[pixel.x][pixel.y].pixel.color === pixel.hexColor){
+          await messageOfPixel[pixel.x][pixel.y].message.delete();
+          let messages=await channel_image.messages.fetch();
+          console.log(messages.size)
+          if(messages.size===0){
+            const pixelNeedChange = await getNextPixel(config,image,apiURL);
+            messageOfPixel= await discord.sendMessageForPixelChange(pixelNeedChange,channel_image);
+          }
+        }
+      }
+
       if (pixel.modifier.author !== pixel.author) {
-        if (pixel.oldHexColor === config.color) {
+        if (pixel.oldHexColor ===  image?image[pixel.x-1][pixel.y-1]:config.color) {
           const member = await discord.getMemberByCoordonne(
             config.idGuild,
             pixel.x,
@@ -41,7 +80,7 @@ processEvent.on("config", async (config) => {
               )
             ).react(config.reaction.negatif);
           }
-        }else if(pixel.hexColor === config.color){
+        }else if(pixel.hexColor === image?image[pixel.x-1][pixel.y-1]:config.color){
           const member = await discord.getMemberByCoordonne(
             config.idGuild,
             pixel.x,
@@ -71,7 +110,7 @@ processEvent.on("config", async (config) => {
           pixel.x,
           pixel.y
         );
-        if (pixel.hexColor === config.color) {
+        if (pixel.hexColor ===  image?image[pixel.x-1][pixel.y-1]:config.color) {
           await (
             await channel.send(
               `${
@@ -90,7 +129,7 @@ processEvent.on("config", async (config) => {
             channel_log
           );
           return;
-        } else if (pixel.oldHexColor === config.color) {
+        } else if (pixel.oldHexColor ===  image?image[pixel.x-1][pixel.y-1]:config.color) {
           await discord.addRole(
             member,
             config.role.region[config.regionName],
@@ -115,7 +154,7 @@ processEvent.on("config", async (config) => {
           return;
         }
         // }
-      } else if (pixel.hexColor === config.color) {
+      } else if (pixel.hexColor ===  image?image[pixel.x-1][pixel.y-1]:config.color) {
         if (departement) {
           await (
             await channel.send(
@@ -157,7 +196,7 @@ processEvent.on("config", async (config) => {
             await axios(`${apiURL}/pixels/?x=${parseInt(x)}&y=${parseInt(y)}`)
           ).data);
         }
-        if (hexColor === config.color) {
+        if (hexColor ===  image?image[pixel.x-1][pixel.y-1]:config.color) {
           role = config.role.valide;
         }
       }
@@ -184,7 +223,7 @@ processEvent.on("config", async (config) => {
               member.nickname ? member.nickname : member.user.username
             );
             if (!pars) {
-              console.log(member.nickname, member.user.username);
+              // console.log(member.nickname, member.user.username);
               let pixel;
               try {
                 pixel = (
