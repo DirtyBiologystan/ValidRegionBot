@@ -20,7 +20,7 @@ const socketIo = require("./service/socket.io");
     })
   );
   socket.on("changePixel", (pixel) => {
-    console.log("changePixel", pixel);
+    // console.log("changePixel", pixel);
     processs.forEach((process) => {
       process.send({ type: "changePixel", data: pixel });
     });

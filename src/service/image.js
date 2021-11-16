@@ -14,7 +14,7 @@ module.exports = {
     let i = 0;
     const pixelToReturn = departementPixels.reduce((accu, pixel) => {
       i++;
-      if (
+      if (image[pixel.x - departement.min.x][pixel.y - departement.min.y] != 0 &&
         pixel.hexColor.toUpperCase() !==
         image[pixel.x - departement.min.x][pixel.y - departement.min.y]
       ) {
