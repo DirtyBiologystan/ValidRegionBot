@@ -56,18 +56,19 @@ module.exports = {
       return x === Number(coordonne[1]) && y === Number(coordonne[2]);
     });
   },
-  sendMessageForPixelChange: async(listPixel,channel)=>{
-    return listPixel.reduce(async (accu,pixel)=>{
-      accu=await accu;
-      console.log(accu)
-      if(!accu[pixel.x]){
-        accu[pixel.x]={};
+  sendMessageForPixelChange: async (listPixel, channel,source, prefix) => {
+    return listPixel.reduce(async (accu, pixel) => {
+      accu = await accu;
+      if (!accu[pixel.x]) {
+        accu[pixel.x] = {};
       }
-      accu[pixel.x][pixel.y]={
+      accu[pixel.x][pixel.y] = {
         pixel,
-        message:await channel.send(`[${pixel.x}:${pixel.y}] => ${pixel.color}`),
-      }
+        message: channel.send(
+          `${prefix} [${pixel.x}:${pixel.y}] => ${pixel.color}`
+        ),
+      };
       return accu;
-    },{})
-  }
+    }, source);
+  },
 };
