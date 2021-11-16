@@ -7,7 +7,7 @@ const process = require("process");
 
 const reg = /^.*[\<[|(]\s*(\d{1,3})[:;\-\/\., ]*(\d{1,3})\s*[\]|>)].*$/;
 
-let apiURL = "https://api.codati.ovh";
+let apiURL = "http://back:8000";
 let pixelNeedChange;
 processEvent.on("config", async (config) => {
   let image;

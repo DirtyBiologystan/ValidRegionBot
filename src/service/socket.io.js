@@ -1,5 +1,5 @@
 const io = require("socket.io-client");
-let socketURL = "https://api.codati.ovh";
+let socketURL = "http://scrap:3000";
 
 const socket = io(socketURL);
 module.exports = {
