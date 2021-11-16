@@ -69,7 +69,7 @@ processEvent.on("config", async (config) => {
             pixelNeedChange,
             channel_image,
             messageOfPixel,
-            `<@&${config.gardien}> `,
+            `<@&${config.role.gardien}> `,
           );
         }
       }
