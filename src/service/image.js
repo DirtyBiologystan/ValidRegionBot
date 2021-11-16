@@ -29,8 +29,8 @@ module.exports = {
     }, []);
     if(pixelToReturn.length){
       let pixels = chance.pickset(pixelToReturn, config.numberOfPixelReturn);
-      return {message:`Image faite à ${Math.floor((1-pixelToReturn.length/image.flat().length)*10000)/100 } % sois ${pixelToReturn.length} / ${image.flat().length}` ,pixels};
+      return {message:`Image faite à ${Math.floor((1-pixelToReturn.length/image.flat().length)*10000)/100 } % soit ${pixelToReturn.length} / ${image.flat().length} restant` ,pixels};
     }
-    return {message:"Image terminée, Bravo à tous!" ,pixels:[]};
+    return {message:"Image terminée, Bravo à tous et touse!" ,pixels:[]};
   },
 };
