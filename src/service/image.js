@@ -6,7 +6,7 @@ var chance = new Chance();
 module.exports = {
   getNextPixel: async (config, image, apiURL) => {
     const { data: departementPixels } = await axios.get(
-      `${apiURL}/pixels/zone/?departement=${config.departementName}`
+      `${apiURL}/pixels/zone/?region=${config.regionName}`
     );
     const { data: departement } = await axios.get(
       `${apiURL}/departements/?name=${config.departementName}`
