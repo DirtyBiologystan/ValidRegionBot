@@ -62,12 +62,14 @@ module.exports = {
       if (!accu[pixel.x]) {
         accu[pixel.x] = {};
       }
-      accu[pixel.x][pixel.y] = {
-        pixel,
-        message: channel.send(
-          `${prefix} [${pixel.x}:${pixel.y}] => ${pixel.color}`
-        ),
-      };
+      if(!accu[pixel.x][pixel.y]){
+        accu[pixel.x][pixel.y] = {
+          pixel,
+          message: channel.send(
+            `${prefix} [${pixel.x}:${pixel.y}] => ${pixel.color}`
+          ),
+        };
+      }
       return accu;
     }, source);
   },
