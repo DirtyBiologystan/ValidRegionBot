@@ -282,7 +282,6 @@ processEvent.on("config", async (config) => {
               member.nickname ? member.nickname : member.user.username
             );
             if (!pars) {
-              console.log(member.nickname, member.user.username);
               let pixel;
               try {
                 pixel = (
