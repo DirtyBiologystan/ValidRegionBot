@@ -29,7 +29,7 @@ module.exports = {
     }, []);
     if(pixelToReturn.length){
       let pixels = chance.pickset(pixelToReturn, config.numberOfPixelReturn);
-      return {message:`Pour aider, choisir une des coordonnées ci dessous, et remplacer la couleur par la valeur indiquée (utilisées des réactions pour indiquer de quel pixel vous vous occupez)
+      return {message:`Pour aider, choisir une des coordonnées ci dessous, et remplacez la couleur par la valeur indiquée (utilisez des réactions pour indiquer quel pixel vous occupez)
 Image faite à ${Math.floor((1-pixelToReturn.length/image.flat().length)*10000)/100 } % soit ${pixelToReturn.length} / ${image.flat().length} restant` ,pixels};
     }
     return {message:"Image terminée, Bravo à tous et touse!" ,pixels:[]};
