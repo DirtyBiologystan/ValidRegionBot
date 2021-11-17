@@ -9,3 +9,5 @@ services:
     command: ["npm","run","dev"]
     environment:
       - TOKEN=$TOKEN
+      - URL_API=$URL_API
+      - URL_SOCKETIO=$URL_SOCKETIO

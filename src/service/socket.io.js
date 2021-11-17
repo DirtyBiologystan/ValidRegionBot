@@ -1,5 +1,5 @@
 const io = require("socket.io-client");
-let socketURL = "http://scrap:3000";
+let socketURL = process.env.URL_SOCKETIO;
 
 const socket = io(socketURL);
 module.exports = {

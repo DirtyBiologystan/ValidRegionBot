@@ -7,7 +7,7 @@ const process = require("process");
 
 const reg = /^.*[\<[|(]\s*(\d{1,3})[:;\-\/\., ]*(\d{1,3})\s*[\]|>)].*$/;
 
-let apiURL = "http://back:8000";
+let apiURL = process.env.URL_API;
 let pixelNeedChange;
 processEvent.on("config", async (config) => {
   let image;
@@ -97,9 +97,9 @@ processEvent.on("config", async (config) => {
 
       if (pixel.modifier.author !== pixel.author) {
         if (
-          pixel.oldHexColor === image
-            ? image[pixel.x - 1][pixel.y - 1]
-            : config.color
+          pixel.oldHexColor === (image && image[pixel.x - 1] && image[pixel.x - 1][pixel.y - 1]
+            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+            : config.color)
         ) {
           const member = await discord.getMemberByCoordonne(
             config.idGuild,
@@ -117,7 +117,7 @@ processEvent.on("config", async (config) => {
           }
         } else if (
           pixel.hexColor === image
-            ? image[pixel.x - 1][pixel.y - 1]
+            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
             : config.color
         ) {
           const member = await discord.getMemberByCoordonne(
@@ -151,7 +151,7 @@ processEvent.on("config", async (config) => {
         );
         if (
           pixel.hexColor === image
-            ? image[pixel.x - 1][pixel.y - 1]
+            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
             : config.color
         ) {
           if(channel){
@@ -175,9 +175,9 @@ processEvent.on("config", async (config) => {
           );
           return;
         } else if (
-          pixel.oldHexColor === image
-            ? image[pixel.x - 1][pixel.y - 1]
-            : config.color
+          pixel.oldHexColor === (image
+            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+            : config.color)
         ) {
           await discord.addRole(
             member,
@@ -206,9 +206,9 @@ processEvent.on("config", async (config) => {
         }
         // }
       } else if (
-        pixel.hexColor === image
-          ? image[pixel.x - 1][pixel.y - 1]
-          : config.color
+        pixel.hexColor === (image  && image[pixel.x - 1] && image[pixel.x - 1][pixel.y - 1]
+          ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+          : config.color)
       ) {
         if(channel){
           if (departement) {
@@ -254,7 +254,7 @@ processEvent.on("config", async (config) => {
           ).data);
         }
         if (
-          hexColor === image ? image[pixel.x - 1][pixel.y - 1] : config.color
+          hexColor === (image ? (image[x - 1][y - 1] || image[x - departement.min.x][y - departement.min.y] === 0 ) : config.color)
         ) {
           role = config.role.valide;
         }
