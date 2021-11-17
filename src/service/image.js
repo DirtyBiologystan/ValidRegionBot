@@ -4,12 +4,9 @@ var Chance = require("chance");
 var chance = new Chance();
 
 module.exports = {
-  getNextPixel: async (config, image, apiURL) => {
+  getNextPixel: async (config, image, apiURL, departement) => {
     const { data: departementPixels } = await axios.get(
       `${apiURL}/pixels/zone/?region=${config.regionName}`
-    );
-    const { data: departement } = await axios.get(
-      `${apiURL}/departements/?name=${config.departementName}`
     );
     let i = 0;
     const pixelToReturn = departementPixels.reduce((accu, pixel) => {
