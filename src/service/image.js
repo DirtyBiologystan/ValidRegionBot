@@ -28,10 +28,10 @@ module.exports = {
     if (pixelToReturn.length) {
       let pixels = chance.pickset(pixelToReturn, config.numberOfPixelReturn);
       return {
-        message: `Pour aider, choisir une des coordonnées ci dessous, et remplacez la couleur par la valeur indiquée (utilisez des réactions pour indiquer quel pixel vous occupez)
+        message: `Pour aider, choisissez une des coordonnées ci dessous, et remplacez la couleur par la valeur indiquée (utilisez des réactions pour indiquer quel pixel vous occupez)
 ${
   config.lienMap
-    ? `Pour se qui préfère choisir la zone qu'il veux dessiné, voici la map des pixels ${config.lienMap}
+    ? `Pour ceux qui préfèrent choisir la zone qu'ils veulent dessiner, voici la map des pixels ${config.lienMap}
 `
     : ""
 }Image faite à ${
