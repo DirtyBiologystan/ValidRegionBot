@@ -14,9 +14,10 @@ module.exports = {
     let i = 0;
     const pixelToReturn = departementPixels.reduce((accu, pixel) => {
       i++;
-      if (image[pixel.x - departement.min.x][pixel.y - departement.min.y] != 0 &&
+      if (
+        image[pixel.x - departement.min.x][pixel.y - departement.min.y] != 0 &&
         pixel.hexColor.toUpperCase() !==
-        image[pixel.x - departement.min.x][pixel.y - departement.min.y]
+          image[pixel.x - departement.min.x][pixel.y - departement.min.y]
       ) {
         accu.push({
           color:
@@ -27,11 +28,22 @@ module.exports = {
       }
       return accu;
     }, []);
-    if(pixelToReturn.length){
+    if (pixelToReturn.length) {
       let pixels = chance.pickset(pixelToReturn, config.numberOfPixelReturn);
-      return {message:`Pour aider, choisir une des coordonnées ci dessous, et remplacez la couleur par la valeur indiquée (utilisez des réactions pour indiquer quel pixel vous occupez)
-Image faite à ${Math.floor((1-pixelToReturn.length/image.flat().length)*10000)/100 } % soit ${pixelToReturn.length} / ${image.flat().length} restant` ,pixels};
+      return {
+        message: `Pour aider, choisir une des coordonnées ci dessous, et remplacez la couleur par la valeur indiquée (utilisez des réactions pour indiquer quel pixel vous occupez)
+${
+  config.lienMap
+    ? `Pour se qui préfère choisir la zone qu'il veux dessiné, voici la map des pixels ${config.lienMap}
+`
+    : ""
+}Image faite à ${
+          Math.floor((1 - pixelToReturn.length / image.flat().length) * 10000) /
+          100
+        } % soit ${pixelToReturn.length} / ${image.flat().length} restant`,
+        pixels,
+      };
     }
-    return {message:"Image terminée, Bravo à tous et touse!" ,pixels:[]};
+    return { message: "Image terminée, Bravo à tous et touse!", pixels: [] };
   },
 };

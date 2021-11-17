@@ -56,13 +56,13 @@ module.exports = {
       return x === Number(coordonne[1]) && y === Number(coordonne[2]);
     });
   },
-  sendMessageForPixelChange: async (listPixel, channel,source, prefix) => {
+  sendMessageForPixelChange: async (listPixel, channel, source, prefix) => {
     return listPixel.reduce(async (accu, pixel) => {
       accu = await accu;
       if (!accu[pixel.x]) {
         accu[pixel.x] = {};
       }
-      if(!accu[pixel.x][pixel.y]){
+      if (!accu[pixel.x][pixel.y]) {
         accu[pixel.x][pixel.y] = {
           pixel,
           message: channel.send(

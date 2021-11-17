@@ -10,7 +10,7 @@
         "Crashapagos": "906991362551992320",
         "autre": "906993680626360321"
       },
-      "gardien":"909883851503964250"
+      "gardien": "909883851503964250"
     },
     "channel": {
       "log": "907755509472428062",
@@ -19,8 +19,9 @@
     "coordonneFix": {
       "181198354712231936": { "x": 35, "y": 210 }
     },
+    "lienMap": "https://sites.google.com/view/coeurhistorique/accueil",
     "image": "ch.json",
-    "surveil":true,
+    "surveil": true,
     "numberOfPixelReturn": 10,
     "time": 30000,
     "reaction": {

@@ -20,7 +20,7 @@ processEvent.on("config", async (config) => {
     const client = await discord.client;
     const guild = await client.guilds.fetch(config.idGuild);
     let channel;
-    if(!config.channel.public){
+    if (!config.channel.public) {
       channel = await guild.channels.cache.get(config.channel.public);
     }
     const channel_log = await guild.channels.cache.get(config.channel.log);
@@ -41,13 +41,17 @@ processEvent.on("config", async (config) => {
       //   }
       // }
 
-      const {pixels:pixelNeedChange,message} = await getNextPixel(config, image, apiURL);
-      await await channel_image.send(message)
+      const { pixels: pixelNeedChange, message } = await getNextPixel(
+        config,
+        image,
+        apiURL
+      );
+      await await channel_image.send(message);
       messageOfPixel = await discord.sendMessageForPixelChange(
         pixelNeedChange,
         channel_image,
         {},
-        '',
+        ""
       );
     }
     let allrole = Object.values(config.role.region);
@@ -61,15 +65,22 @@ processEvent.on("config", async (config) => {
       let [departement] = (
         await axios(`${apiURL}/departements/?x=${pixel.x}&y=${pixel.y}`)
       ).data;
-      if(config.surveil && departement && config.regionName === departement.region){
-        const {pixels:pixelNeedChange,message} = await getNextPixel(config, image, apiURL);
-        if(pixelNeedChange.length){
-
+      if (
+        config.surveil &&
+        departement &&
+        config.regionName === departement.region
+      ) {
+        const { pixels: pixelNeedChange, message } = await getNextPixel(
+          config,
+          image,
+          apiURL
+        );
+        if (pixelNeedChange.length) {
           messageOfPixel = await discord.sendMessageForPixelChange(
             pixelNeedChange,
             channel_image,
             messageOfPixel,
-            `<@&${config.role.gardien}> `,
+            `<@&${config.role.gardien}> `
           );
         }
       }
@@ -83,13 +94,17 @@ processEvent.on("config", async (config) => {
           let messages = await channel_image.messages.fetch();
           if (messages.size === 1) {
             await messages.last().delete();
-            const {pixels:pixelNeedChange,message} = await getNextPixel(config, image, apiURL);
-            await channel_image.send(message)
+            const { pixels: pixelNeedChange, message } = await getNextPixel(
+              config,
+              image,
+              apiURL
+            );
+            await channel_image.send(message);
             messageOfPixel = await discord.sendMessageForPixelChange(
               pixelNeedChange,
               channel_image,
               {},
-              '',
+              ""
             );
           }
         }
@@ -97,8 +112,12 @@ processEvent.on("config", async (config) => {
 
       if (pixel.modifier.author !== pixel.author) {
         if (
-          pixel.oldHexColor === (image && image[pixel.x - 1] && image[pixel.x - 1][pixel.y - 1]
-            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+          pixel.oldHexColor ===
+          (image && image[pixel.x - 1] && image[pixel.x - 1][pixel.y - 1]
+            ? image[pixel.x - 1][pixel.y - 1] ||
+              image[pixel.x - departement.min.x][
+                pixel.y - departement.min.y
+              ] === 0
             : config.color)
         ) {
           const member = await discord.getMemberByCoordonne(
@@ -117,7 +136,10 @@ processEvent.on("config", async (config) => {
           }
         } else if (
           pixel.hexColor === image
-            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+            ? image[pixel.x - 1][pixel.y - 1] ||
+              image[pixel.x - departement.min.x][
+                pixel.y - departement.min.y
+              ] === 0
             : config.color
         ) {
           const member = await discord.getMemberByCoordonne(
@@ -125,7 +147,7 @@ processEvent.on("config", async (config) => {
             pixel.x,
             pixel.y
           );
-          if(channel){
+          if (channel) {
             await (
               await channel.send(
                 `${
@@ -151,10 +173,13 @@ processEvent.on("config", async (config) => {
         );
         if (
           pixel.hexColor === image
-            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+            ? image[pixel.x - 1][pixel.y - 1] ||
+              image[pixel.x - departement.min.x][
+                pixel.y - departement.min.y
+              ] === 0
             : config.color
         ) {
-          if(channel){
+          if (channel) {
             await (
               await channel.send(
                 `${
@@ -175,8 +200,12 @@ processEvent.on("config", async (config) => {
           );
           return;
         } else if (
-          pixel.oldHexColor === (image
-            ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+          pixel.oldHexColor ===
+          (image
+            ? image[pixel.x - 1][pixel.y - 1] ||
+              image[pixel.x - departement.min.x][
+                pixel.y - departement.min.y
+              ] === 0
             : config.color)
         ) {
           await discord.addRole(
@@ -185,7 +214,7 @@ processEvent.on("config", async (config) => {
             allrole,
             channel_log
           );
-          if(channel){
+          if (channel) {
             await (
               await channel.send(
                 `${
@@ -206,11 +235,14 @@ processEvent.on("config", async (config) => {
         }
         // }
       } else if (
-        pixel.hexColor === (image  && image[pixel.x - 1] && image[pixel.x - 1][pixel.y - 1]
-          ? (image[pixel.x - 1][pixel.y - 1] || image[pixel.x - departement.min.x][pixel.y - departement.min.y] === 0 )
+        pixel.hexColor ===
+        (image && image[pixel.x - 1] && image[pixel.x - 1][pixel.y - 1]
+          ? image[pixel.x - 1][pixel.y - 1] ||
+            image[pixel.x - departement.min.x][pixel.y - departement.min.y] ===
+              0
           : config.color)
       ) {
-        if(channel){
+        if (channel) {
           if (departement) {
             await (
               await channel.send(
@@ -254,7 +286,11 @@ processEvent.on("config", async (config) => {
           ).data);
         }
         if (
-          hexColor === (image ? (image[x - 1][y - 1] || image[x - departement.min.x][y - departement.min.y] === 0 ) : config.color)
+          hexColor ===
+          (image
+            ? image[x - 1][y - 1] ||
+              image[x - departement.min.x][y - departement.min.y] === 0
+            : config.color)
         ) {
           role = config.role.valide;
         }
