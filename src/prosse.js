@@ -125,7 +125,7 @@ processEvent.on("config", async (config) => {
           if(!(await messageOfPixel[pixel.x][pixel.y].message).deleted){
             await (await messageOfPixel[pixel.x][pixel.y].message).delete();
             let messages = await channel_image.messages.fetch();
-            if (messages.size === 1) {
+            if (messages.size === 1&& !config.surveil) {
               await messages.last().delete();
               const { pixels: pixelNeedChange, message } = await getNextPixel(
                 config,
