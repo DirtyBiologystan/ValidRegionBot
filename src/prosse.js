@@ -126,6 +126,7 @@ processEvent.on("config", async (config) => {
         if (messageOfPixel[pixel.x][pixel.y].pixel.color === pixel.hexColor) {
           if(!(await messageOfPixel[pixel.x][pixel.y].message).deleted){
             await (await messageOfPixel[pixel.x][pixel.y].message).delete();
+            messageOfPixel[pixel.x][pixel.y]= undefined;
             let messages = await channel_image.messages.fetch();
             if (messages.size === 1 && !config.surveil) {
               await messages.last().delete();
