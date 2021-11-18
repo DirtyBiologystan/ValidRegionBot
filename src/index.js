@@ -5,7 +5,7 @@ const socketIo = require("./service/socket.io");
 (async () => {
   const socket = await socketIo.socket;
   const processs = await Promise.all(
-    configs.map(async (config) => {
+    configs.map(async (config,id) => {
       const process = await new Promise((resolve, reject) => {
         const processInP = child_process.fork(`${__dirname}/prosse.js`);
         processInP.on("spawn", () => {
@@ -20,15 +20,19 @@ const socketIo = require("./service/socket.io");
     })
   );
   socket.on("changePixel", (pixel) => {
-    // console.log("changePixel", pixel);
     processs.forEach((process) => {
       process.send({ type: "changePixel", data: pixel });
     });
   });
-  //
-  // process.on('exit', (code) => {
-  //   processs.forEach(((process)=>{
-  //     process.kill();
-  //   }));
-  // });
+  processs.forEach((process,id1)=>{
+    process.on("message",(data)=>{
+      console.log(data);
+      processs.forEach((process,id2) => {
+        if(id1 !== id2){
+          process.send(data);
+        }
+      });
+    })
+  })
+
 })().then(console.log, console.error);

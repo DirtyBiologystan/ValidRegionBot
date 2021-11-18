@@ -13,9 +13,7 @@ processEvent.on("config", async (config) => {
   let image;
   let pixelNeedChange;
 
-  // let imageObject=[];
   let messageOfPixel;
-  // let pixelNeedChange;
   const myDepartement = (await axios.get(
     `${apiURL}/departements/?name=${config.departementName}`
   )).data
@@ -39,11 +37,6 @@ processEvent.on("config", async (config) => {
     }
     if (config.image) {
       image = require(`./image/${config.image}`);
-      // for (var x = 0; x < image.length; x++) {
-      //   for (var y = 0; y < image[x].length; y++) {
-      //     imageObject.push({ color:image[x][y],x,y});
-      //   }
-      // }
 
       const { pixels: pixelNeedChange, message } = await getNextPixel(
         config,
@@ -56,6 +49,7 @@ processEvent.on("config", async (config) => {
         pixelNeedChange,
         channel_image,
         {},
+        config,
         ""
       );
     }
@@ -65,6 +59,34 @@ processEvent.on("config", async (config) => {
     console.log(`Logged in as ${client.user.tag} in ${guild.name}!`);
 
     channel_log.send("I am up!");
+    if(config.surveil){
+      processEvent.on("react",async(pixel)=>{
+        console.log("react",pixel.x,pixel.y)
+        if(messageOfPixel[pixel.x] && messageOfPixel[pixel.x][pixel.y]){
+          if(!(await messageOfPixel[pixel.x][pixel.y].message).deleted){
+            await (await messageOfPixel[pixel.x][pixel.y].message).react(config.reaction.positif);
+          }
+        }
+      });
+      processEvent.on("unreact",async(pixel)=>{
+        console.log("unreact",pixel.x,pixel.y)
+        if(messageOfPixel[pixel.x] && messageOfPixel[pixel.x][pixel.y]){
+          if(!(await messageOfPixel[pixel.x][pixel.y].message).deleted){
+            await (await messageOfPixel[pixel.x][pixel.y].message).reactions.removeAll();
+          }
+        }
+      });
+      processEvent.on("alert",async(data)=>{
+        console.log(data);
+        messageOfPixel = await discord.sendMessageForPixelChange(
+          data.pixelNeedChange,
+          channel_image,
+          messageOfPixel,
+          config,
+          `<@&${config.role.gardien}> `
+        );
+      });
+    }
 
     processEvent.on("changePixel", async (pixel) => {
       let [departement] = (
@@ -82,10 +104,14 @@ processEvent.on("config", async (config) => {
           myDepartement
         );
         if (pixelNeedChange.length) {
+          process.send({type:"alert",data:{
+            pixelNeedChange,
+          }});
           messageOfPixel = await discord.sendMessageForPixelChange(
             pixelNeedChange,
             channel_image,
             messageOfPixel,
+            config,
             `<@&${config.role.gardien}> `
           );
         }
@@ -96,23 +122,26 @@ processEvent.on("config", async (config) => {
         messageOfPixel[pixel.x][pixel.y]
       ) {
         if (messageOfPixel[pixel.x][pixel.y].pixel.color === pixel.hexColor) {
-          await (await messageOfPixel[pixel.x][pixel.y].message).delete();
-          let messages = await channel_image.messages.fetch();
-          if (messages.size === 1) {
-            await messages.last().delete();
-            const { pixels: pixelNeedChange, message } = await getNextPixel(
-              config,
-              image,
-              apiURL,
-              myDepartement
-            );
-            await channel_image.send(message);
-            messageOfPixel = await discord.sendMessageForPixelChange(
-              pixelNeedChange,
-              channel_image,
-              {},
-              ""
-            );
+          if(!(await messageOfPixel[pixel.x][pixel.y].message).deleted){
+            await (await messageOfPixel[pixel.x][pixel.y].message).delete();
+            let messages = await channel_image.messages.fetch();
+            if (messages.size === 1) {
+              await messages.last().delete();
+              const { pixels: pixelNeedChange, message } = await getNextPixel(
+                config,
+                image,
+                apiURL,
+                myDepartement
+              );
+              await channel_image.send(message);
+              messageOfPixel = await discord.sendMessageForPixelChange(
+                pixelNeedChange,
+                channel_image,
+                {},
+                config,
+                ""
+              );
+            }
           }
         }
       }
