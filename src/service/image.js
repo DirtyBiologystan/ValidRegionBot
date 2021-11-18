@@ -41,6 +41,6 @@ ${
         pixels,
       };
     }
-    return { message: "Image terminée, Bravo à tous et touse!", pixels: [] };
+    return { message: "Image terminée, Bravo à tous et toutes!", pixels: [] };
   },
 };
