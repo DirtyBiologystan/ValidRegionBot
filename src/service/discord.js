@@ -56,7 +56,7 @@ module.exports = {
       return x === Number(coordonne[1]) && y === Number(coordonne[2]);
     });
   },
-  sendMessageForPixelChange: async (listPixel, channel, source,config prefix) => {
+  sendMessageForPixelChange: async (listPixel, channel, source,config,prefix) => {
     return listPixel.reduce(async (accu, pixel) => {
       accu = await accu;
       if (!accu[pixel.x]) {
