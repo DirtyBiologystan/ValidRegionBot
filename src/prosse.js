@@ -45,7 +45,7 @@ processEvent.on("config", async (config) => {
         myDepartement
       );
       if(!config.surveil){
-        await await channel_image.send(message);
+        await channel_image.send(message);
       }
       messageOfPixel = await discord.sendMessageForPixelChange(
         pixelNeedChange,
