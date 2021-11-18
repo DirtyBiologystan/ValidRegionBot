@@ -44,7 +44,9 @@ processEvent.on("config", async (config) => {
         apiURL,
         myDepartement
       );
-      await await channel_image.send(message);
+      if(!config.surveil){
+        await await channel_image.send(message);
+      }
       messageOfPixel = await discord.sendMessageForPixelChange(
         pixelNeedChange,
         channel_image,
@@ -125,7 +127,7 @@ processEvent.on("config", async (config) => {
           if(!(await messageOfPixel[pixel.x][pixel.y].message).deleted){
             await (await messageOfPixel[pixel.x][pixel.y].message).delete();
             let messages = await channel_image.messages.fetch();
-            if (messages.size === 1&& !config.surveil) {
+            if (messages.size === 1 && !config.surveil) {
               await messages.last().delete();
               const { pixels: pixelNeedChange, message } = await getNextPixel(
                 config,
