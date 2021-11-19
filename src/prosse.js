@@ -45,13 +45,13 @@ processEvent.on("config", async (config) => {
       if (!config.surveil) {
         await channel_image.send(message);
       }
-      if(config.revolution){
+      if (config.revolution) {
         if (pixelNeedChange.length) {
           process.send({
             type: "alert",
             data: {
               pixelNeedChange,
-              prefix:"MKR revolution "
+              prefix: "MKR revolution ",
             },
           });
         }
@@ -65,8 +65,7 @@ processEvent.on("config", async (config) => {
       );
     }
     let allrole;
-    if(!config.revolution)
-    {
+    if (!config.revolution) {
       allrole = Object.values(config.role.region);
       allrole.push(config.role.valide);
     }
@@ -101,7 +100,7 @@ processEvent.on("config", async (config) => {
           channel_image,
           messageOfPixel,
           config,
-          `${data.prefix?data.prefix:"<@&${config.role.gardien}> "}`
+          `${data.prefix ? data.prefix : "<@&${config.role.gardien}> "}`
         );
       });
     }
@@ -155,15 +154,15 @@ processEvent.on("config", async (config) => {
                 apiURL,
                 myDepartement
               );
-              if(config.revolution){
-                if(!config.revolution){
+              if (config.revolution) {
+                if (!config.revolution) {
                   if (pixelNeedChange.length) {
                     process.send({
                       type: "alert",
                       data: {
                         pixelNeedChange,
-                        prefix:"MKR revolution "
-                       },
+                        prefix: "MKR revolution ",
+                      },
                     });
                   }
                 }
@@ -180,14 +179,15 @@ processEvent.on("config", async (config) => {
           }
         }
       }
-      if(!config.revolution)
-      {
+      if (!config.revolution) {
         if (pixel.modifier.author !== pixel.author) {
           if (
             pixel.oldHexColor ===
             (image &&
             image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] &&
+            image[pixel.x - myDepartement.min.x][
+              pixel.y - myDepartement.min.y
+            ] &&
             image[pixel.x - myDepartement.min.x][
               pixel.y - myDepartement.min.y
             ] !== 0
@@ -214,7 +214,9 @@ processEvent.on("config", async (config) => {
             pixel.hexColor ===
             (image &&
             image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] &&
+            image[pixel.x - myDepartement.min.x][
+              pixel.y - myDepartement.min.y
+            ] &&
             image[pixel.x - myDepartement.min.x][
               pixel.y - myDepartement.min.y
             ] !== 0
@@ -255,7 +257,9 @@ processEvent.on("config", async (config) => {
             pixel.hexColor ===
             (image &&
             image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] &&
+            image[pixel.x - myDepartement.min.x][
+              pixel.y - myDepartement.min.y
+            ] &&
             image[pixel.x - myDepartement.min.x][
               pixel.y - myDepartement.min.y
             ] !== 0
@@ -288,7 +292,9 @@ processEvent.on("config", async (config) => {
             pixel.hexColor.toUpperCase() ===
             (image &&
             image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] &&
+            image[pixel.x - myDepartement.min.x][
+              pixel.y - myDepartement.min.y
+            ] &&
             image[pixel.x - myDepartement.min.x][
               pixel.y - myDepartement.min.y
             ] !== 0
@@ -327,9 +333,12 @@ processEvent.on("config", async (config) => {
           (image &&
           image[pixel.x - myDepartement.min.x] &&
           image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] &&
-          image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] !==
-            0
-            ? image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y]
+          image[pixel.x - myDepartement.min.x][
+            pixel.y - myDepartement.min.y
+          ] !== 0
+            ? image[pixel.x - myDepartement.min.x][
+                pixel.y - myDepartement.min.y
+              ]
             : config.color)
         ) {
           if (channel) {
@@ -350,8 +359,7 @@ processEvent.on("config", async (config) => {
         }
       }
     });
-    if(!config.revolution)
-    {
+    if (!config.revolution) {
       await gestionRole({
         config,
         image,
@@ -361,7 +369,6 @@ processEvent.on("config", async (config) => {
         channel_log,
       });
     }
-
   } catch (e) {
     console.error(e);
     process.exit(1);

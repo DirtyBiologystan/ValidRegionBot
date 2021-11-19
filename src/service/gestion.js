@@ -6,8 +6,15 @@ const discord = require("./discord");
 const apiURL = process.env.URL_API;
 
 module.exports = {
-  gestionRole : async({config,image,guild,myDepartement,allrole,channel_log})=>{
-    const q = async.queue(async ({ x, y, member, hexColor, region}) => {
+  gestionRole: async ({
+    config,
+    image,
+    guild,
+    myDepartement,
+    allrole,
+    channel_log,
+  }) => {
+    const q = async.queue(async ({ x, y, member, hexColor, region }) => {
       if (!region) {
         [region] = (
           await axios(
@@ -95,5 +102,5 @@ module.exports = {
         console.error(e);
       }
     }, config.time);
-  }
-}
+  },
+};

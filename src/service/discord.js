@@ -56,7 +56,13 @@ module.exports = {
       return x === Number(coordonne[1]) && y === Number(coordonne[2]);
     });
   },
-  sendMessageForPixelChange: async (listPixel, channel, source,config,prefix) => {
+  sendMessageForPixelChange: async (
+    listPixel,
+    channel,
+    source,
+    config,
+    prefix
+  ) => {
     return listPixel.reduce(async (accu, pixel) => {
       accu = await accu;
       if (!accu[pixel.x]) {
@@ -66,18 +72,21 @@ module.exports = {
         const pMessage = channel.send(
           `${prefix} [${pixel.x}:${pixel.y}] => ${pixel.color}`
         );
-        if(config.surveil){
-          pMessage.then((message)=>{
-            const collector = message.createReactionCollector((reaction, user) =>  user.id !== '906987786702295112',{max:Number.MAX_VALUE,dispose: true});
-            collector.on('collect',()=>{
+        if (config.surveil) {
+          pMessage.then((message) => {
+            const collector = message.createReactionCollector(
+              (reaction, user) => user.id !== "906987786702295112",
+              { max: Number.MAX_VALUE, dispose: true }
+            );
+            collector.on("collect", () => {
               console.log("collect");
-              process.send({type:"react",data:pixel});
+              process.send({ type: "react", data: pixel });
             });
-            collector.on('dispose',()=>{
+            collector.on("dispose", () => {
               console.log("dispose");
-              process.send({type:"unreact",data:pixel});
+              process.send({ type: "unreact", data: pixel });
             });
-            collector.on('end',()=>{
+            collector.on("end", () => {
               console.log("end");
               console.log(collector.endReason());
             });
@@ -85,7 +94,7 @@ module.exports = {
         }
         accu[pixel.x][pixel.y] = {
           pixel,
-          message:pMessage,
+          message: pMessage,
         };
       }
 
