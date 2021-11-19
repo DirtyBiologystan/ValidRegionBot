@@ -136,7 +136,7 @@ processEvent.on("config", async (config) => {
             channel_image,
             messageOfPixel,
             config,
-            `<@&${config.role.gardien}> `
+            `${config.reaction.représentation}<@&${config.role.gardien}> `
           );
         }
       }
