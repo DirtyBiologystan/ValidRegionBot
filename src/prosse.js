@@ -100,7 +100,7 @@ processEvent.on("config", async (config) => {
           channel_image,
           messageOfPixel,
           config,
-          `${data.prefix ? data.prefix : "<@&${config.role.gardien}> "}`
+          data.prefix ? data.prefix : `<@&${config.role.gardien}> `
         );
       });
     }
