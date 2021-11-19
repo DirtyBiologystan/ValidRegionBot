@@ -51,7 +51,7 @@ processEvent.on("config", async (config) => {
             type: "alert",
             data: {
               pixelNeedChange,
-              prefix: "MKR revolution ",
+              prefix: config.message,
             },
           });
         }
@@ -160,7 +160,7 @@ processEvent.on("config", async (config) => {
                     type: "alert",
                     data: {
                       pixelNeedChange,
-                      prefix: "MKR revolution ",
+                      prefix: config.message,
                     },
                   });
                 }
