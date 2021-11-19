@@ -100,7 +100,9 @@ processEvent.on("config", async (config) => {
           channel_image,
           messageOfPixel,
           config,
-          data.prefix ? data.prefix : `<@&${config.role.gardien}> `
+          `${data.prefix ? data.prefix : ""}${
+            data.garde ? `<@&${config.role.gardien}> ` : ""
+          }`
         );
       });
     }
@@ -125,6 +127,8 @@ processEvent.on("config", async (config) => {
             type: "alert",
             data: {
               pixelNeedChange,
+              prefix: config.représentation,
+              garde: true,
             },
           });
           messageOfPixel = await discord.sendMessageForPixelChange(
