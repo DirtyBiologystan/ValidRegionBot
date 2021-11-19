@@ -127,7 +127,7 @@ processEvent.on("config", async (config) => {
             type: "alert",
             data: {
               pixelNeedChange,
-              prefix: config.représentation,
+              prefix: config.reaction.représentation,
               garde: true,
             },
           });
