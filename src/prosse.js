@@ -155,16 +155,14 @@ processEvent.on("config", async (config) => {
                 myDepartement
               );
               if (config.revolution) {
-                if (!config.revolution) {
-                  if (pixelNeedChange.length) {
-                    process.send({
-                      type: "alert",
-                      data: {
-                        pixelNeedChange,
-                        prefix: "MKR revolution ",
-                      },
-                    });
-                  }
+                if (pixelNeedChange.length) {
+                  process.send({
+                    type: "alert",
+                    data: {
+                      pixelNeedChange,
+                      prefix: "MKR revolution ",
+                    },
+                  });
                 }
               }
               await channel_image.send(message);
