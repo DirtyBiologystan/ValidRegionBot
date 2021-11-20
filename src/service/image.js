@@ -17,10 +17,10 @@ module.exports = {
           image[pixel.x - departement.min.x][pixel.y - departement.min.y]
       ) {
         accu.push({
-          color:
-            image[pixel.x - departement.min.x][pixel.y - departement.min.y],
+          color: image[pixel.x - departement.min.x][pixel.y - departement.min.y],
           x: pixel.x,
           y: pixel.y,
+          colorOld: pixel.hexColor,
         });
       }
       return accu;

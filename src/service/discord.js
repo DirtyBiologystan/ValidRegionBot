@@ -70,7 +70,7 @@ module.exports = {
       }
       if (!accu[pixel.x][pixel.y]) {
         const pMessage = channel.send(
-          `${prefix} [${pixel.x}:${pixel.y}] => ${pixel.color}`
+          `${prefix} [${pixel.x}:${pixel.y}] => ${pixel.colorOld} => **${pixel.color}**`
         );
         if (config.surveil) {
           pMessage.then((message) => {
