@@ -87,7 +87,7 @@ module.exports = {
                   x: pixel.x,
                   y: pixel.y,
                   member,
-                  region: pixel.departements,
+                  region: pixel.departements.region,
                 };
               } else {
                 return false;
