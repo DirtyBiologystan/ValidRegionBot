@@ -56,6 +56,16 @@ module.exports = {
       return x === Number(coordonne[1]) && y === Number(coordonne[2]);
     });
   },
+  cleanChannel: async (channel) => {
+    let messages = await channel.messages.fetch();
+    await Promise.all(
+      messages.map(async (message) => {
+        if(! message.deleted){
+          await message.delete();
+        }
+      })
+    );
+  },
   sendMessageForPixelChange: async (
     listPixel,
     channel,
@@ -64,6 +74,7 @@ module.exports = {
     prefix
   ) => {
     return listPixel.reduce(async (accu, pixel) => {
+      console.log(pixel)
       accu = await accu;
       if (!accu[pixel.x]) {
         accu[pixel.x] = {};

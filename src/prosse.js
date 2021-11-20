@@ -3,7 +3,7 @@ const axios = require("axios");
 
 const discord = require("./service/discord");
 const processEvent = require("./service/processEvent");
-const { getNextPixel } = require("./service/image");
+const { getNextPixel, imageToJson } = require("./service/image");
 const { gestionRole } = require("./service/gestion");
 
 const apiURL = process.env.URL_API;
@@ -25,16 +25,60 @@ processEvent.on("config", async (config) => {
     }
     const channel_log = await guild.channels.cache.get(config.channel.log);
     const channel_image = await guild.channels.cache.get(config.channel.image);
-    if (channel_image) {
-      let messages = await channel_image.messages.fetch();
-      await Promise.all(
-        messages.map(async (message) => {
-          await message.delete();
-        })
-      );
-    }
     if (config.image) {
+      await channel_log.send(
+        "Envoyé une image ici pour mettre a jour l'image utilisé (vous devez étre en mode construction pour faire ça, a par si il y a trés peut de modification)"
+      );
+      if (channel_image) {
+        await discord.cleanChannel(channel_image);
+      }
       image = require(`./image/${config.image}`);
+
+      const collectorImage = channel_log.createMessageCollector(
+        (message) => message.attachments.size === 1,
+        { max: Number.MAX_VALUE }
+      );
+
+      collectorImage.on("collect", async (message) => {
+        const url = await message.attachments.first().url;
+        await channel_log.send("chargement de l'image");
+        const req = await axios(url, {
+          responseType: "arraybuffer",
+        });
+        image = await imageToJson(config, req.data, channel_log);
+        await channel_log.send("clean du channel 'Pixels'");
+        await discord.cleanChannel(channel_image);
+        const { pixels: pixelNeedChange, messageText } = await getNextPixel(
+          config,
+          image,
+          apiURL,
+          myDepartement
+        );
+        if (!config.surveil && messageText) {
+          await channel_image.send(messageText);
+        }
+        if (config.revolution) {
+          if (pixelNeedChange.length) {
+            process.send({
+              type: "alert",
+              data: {
+                pixelNeedChange,
+                prefix: config.message,
+              },
+            });
+          }
+        }
+        await channel_log.send(
+          "envoi des nouveaux message (véfier les premier fois pixels, pour évité les problémes)"
+        );
+        messageOfPixel = await discord.sendMessageForPixelChange(
+          pixelNeedChange,
+          channel_image,
+          {},
+          config,
+          ""
+        );
+      });
 
       const { pixels: pixelNeedChange, message } = await getNextPixel(
         config,
@@ -71,7 +115,7 @@ processEvent.on("config", async (config) => {
     }
     console.log(`Logged in as ${client.user.tag} in ${guild.name}!`);
 
-    channel_log.send("I am up!");
+    await channel_log.send("I am up!");
     if (config.surveil) {
       processEvent.on("react", async (pixel) => {
         console.log("react", pixel.x, pixel.y);
