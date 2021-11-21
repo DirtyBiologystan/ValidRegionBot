@@ -26,7 +26,8 @@ module.exports = {
       return accu;
     }, []);
     if (pixelToReturn.length) {
-      let pixels = chance.pickset(pixelToReturn, config.numberOfPixelReturn);
+      //let pixels = chance.pickset(pixelToReturn, config.numberOfPixelReturn);
+      let pixels = pixelToReturn.slice(0, config.numberOfPixelReturn);
       return {
         message: `Pour aider, choisissez une des coordonnées ci dessous, et remplacez la couleur par la valeur indiquée (utilisez des réactions pour indiquer quel pixel vous occupez)
 ${
