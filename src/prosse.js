@@ -87,13 +87,15 @@ processEvent.on("config", async (config) => {
       }
       if (config.revolution) {
         if (pixelNeedChange.length) {
-          process.send({
-            type: "alert",
-            data: {
-              pixelNeedChange,
-              prefix: config.message,
-            },
-          });
+          setTimeout(()=>{
+            process.send({
+              type: "alert",
+              data: {
+                pixelNeedChange,
+                prefix: config.message,
+              },
+            });
+          },10000);
         }
       }
       messageOfPixel = await discord.sendMessageForPixelChange(
@@ -114,7 +116,6 @@ processEvent.on("config", async (config) => {
     await channel_log.send("I am up!");
     if (config.surveil) {
       processEvent.on("react", async (pixel) => {
-        console.log("react", pixel.x, pixel.y);
         if (messageOfPixel[pixel.x] && messageOfPixel[pixel.x][pixel.y]) {
           if (!(await messageOfPixel[pixel.x][pixel.y].message).deleted) {
             await (
@@ -124,7 +125,6 @@ processEvent.on("config", async (config) => {
         }
       });
       processEvent.on("unreact", async (pixel) => {
-        console.log("unreact", pixel.x, pixel.y);
         if (messageOfPixel[pixel.x] && messageOfPixel[pixel.x][pixel.y]) {
           if (!(await messageOfPixel[pixel.x][pixel.y].message).deleted) {
             await (
@@ -134,7 +134,6 @@ processEvent.on("config", async (config) => {
         }
       });
       processEvent.on("alert", async (data) => {
-        console.log(data);
         messageOfPixel = await discord.sendMessageForPixelChange(
           data.pixelNeedChange,
           channel_image,
@@ -227,7 +226,3 @@ processEvent.on("config", async (config) => {
     process.exit(1);
   }
 });
-// 906991307069718570
-// 906992272753696838
-// 906991362551992320
-// 906993680626360321
