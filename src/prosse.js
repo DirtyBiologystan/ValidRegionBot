@@ -4,7 +4,7 @@ const axios = require("axios");
 const discord = require("./service/discord");
 const processEvent = require("./service/processEvent");
 const { getNextPixel, imageToJson } = require("./service/image");
-const { gestionRole } = require("./service/gestion");
+// const { gestionRole } = require("./service/gestion");
 
 const apiURL = process.env.URL_API;
 processEvent.on("config", async (config) => {
@@ -19,10 +19,6 @@ processEvent.on("config", async (config) => {
     console.log(config);
     const client = await discord.client;
     const guild = await client.guilds.fetch(config.idGuild);
-    let channel;
-    if (!config.channel.public) {
-      channel = await guild.channels.cache.get(config.channel.public);
-    }
     const channel_log = await guild.channels.cache.get(config.channel.log);
     const channel_image = await guild.channels.cache.get(config.channel.image);
     if (config.image) {
@@ -225,196 +221,7 @@ processEvent.on("config", async (config) => {
           }
         }
       }
-      if (!config.revolution) {
-        if (pixel.modifier.author !== pixel.author) {
-          if (
-            pixel.oldHexColor ===
-            (image &&
-            image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] !== 0
-              ? image[pixel.x - myDepartement.min.x][
-                  pixel.y - myDepartement.min.y
-                ]
-              : config.color)
-          ) {
-            const member = await discord.getMemberByCoordonne(
-              config.idGuild,
-              pixel.x,
-              pixel.y
-            );
-            if (member && channel) {
-              await (
-                await channel.send(
-                  `${
-                    member.nickname ? member.nickname : member.user.username
-                  }! ton pixel a été changé de couleur!`
-                )
-              ).react(config.reaction.negatif);
-            }
-          } else if (
-            pixel.hexColor ===
-            (image &&
-            image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] !== 0
-              ? image[pixel.x - myDepartement.min.x][
-                  pixel.y - myDepartement.min.y
-                ]
-              : config.color)
-          ) {
-            const member = await discord.getMemberByCoordonne(
-              config.idGuild,
-              pixel.x,
-              pixel.y
-            );
-            if (channel) {
-              await (
-                await channel.send(
-                  `${
-                    member
-                      ? member.nickname
-                        ? member.nickname
-                        : member.user.username
-                      : `[${pixel.x}:${pixel.y}]`
-                  } arbore nos couleurs de force!`
-                )
-              ).react(config.reaction.positif);
-            }
-          }
-          return;
-        }
-
-        if (departement && config.regionName === departement.region) {
-          const member = await discord.getMemberByCoordonne(
-            config.idGuild,
-            pixel.x,
-            pixel.y
-          );
-          if (
-            pixel.hexColor ===
-            (image &&
-            image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] !== 0
-              ? image[pixel.x - myDepartement.min.x][
-                  pixel.y - myDepartement.min.y
-                ]
-              : config.color)
-          ) {
-            if (channel) {
-              await (
-                await channel.send(
-                  `${
-                    member
-                      ? member.nickname
-                        ? member.nickname
-                        : member.user.username
-                      : `[${pixel.x}:${pixel.y}]`
-                  } arbore nos couleurs !`
-                )
-              ).react(config.reaction.positif);
-            }
-            await discord.addRole(
-              member,
-              config.role.valide,
-              allrole,
-              channel_log
-            );
-            return;
-          } else if (
-            pixel.hexColor.toUpperCase() ===
-            (image &&
-            image[pixel.x - myDepartement.min.x] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] &&
-            image[pixel.x - myDepartement.min.x][
-              pixel.y - myDepartement.min.y
-            ] !== 0
-              ? image[pixel.x - myDepartement.min.x][
-                  pixel.y - myDepartement.min.y
-                ]
-              : config.color)
-          ) {
-            await discord.addRole(
-              member,
-              config.role.region[config.regionName],
-              allrole,
-              channel_log
-            );
-            if (channel) {
-              await (
-                await channel.send(
-                  `${
-                    member ? `<@${member.id}>` : `[${pixel.x}:${pixel.y}]`
-                  } nous trompe pour le ${pixel.hexColor} !`
-                )
-              ).react(config.reaction.negatif);
-            }
-            return;
-          } else {
-            await discord.addRole(
-              member,
-              config.role.region[config.regionName],
-              allrole,
-              channel_log
-            );
-            return;
-          }
-        } else if (
-          pixel.hexColor.toUpperCase() ===
-          (image &&
-          image[pixel.x - myDepartement.min.x] &&
-          image[pixel.x - myDepartement.min.x][pixel.y - myDepartement.min.y] &&
-          image[pixel.x - myDepartement.min.x][
-            pixel.y - myDepartement.min.y
-          ] !== 0
-            ? image[pixel.x - myDepartement.min.x][
-                pixel.y - myDepartement.min.y
-              ]
-            : config.color)
-        ) {
-          if (channel) {
-            if (departement) {
-              await (
-                await channel.send(
-                  `[${pixel.x}:${pixel.y}] de la région "${departement.region}" ("${departement.name}") arbore notre couleur !`
-                )
-              ).react(config.reaction.positif);
-            } else {
-              await (
-                await channel.send(
-                  `[${pixel.x}:${pixel.y}] d'un territoire inconnu a adopté la bonne couleur !`
-                )
-              ).react(config.reaction.positif);
-            }
-          }
-        }
-      }
-    });
-    if (!config.revolution) {
-      await gestionRole({
-        config,
-        image,
-        guild,
-        myDepartement,
-        allrole,
-        channel_log,
-      });
-    }
+    })
   } catch (e) {
     console.error(e);
     process.exit(1);
