@@ -1,7 +1,16 @@
 const axios = require("axios");
 var Chance = require("chance");
-
+const getPixels = require("get-pixels");
+const { writeFile } = require("fs/promises");
 var chance = new Chance();
+
+const convertNumberToHex = (number) => {
+  if (number < 16) {
+    return `0${number.toString(16).toUpperCase()}`;
+  } else {
+    return `${number.toString(16).toUpperCase()}`;
+  }
+};
 
 module.exports = {
   getNextPixel: async (config, image, apiURL, departement) => {
@@ -10,6 +19,9 @@ module.exports = {
     );
     let i = 0;
     const pixelToReturn = departementPixels.reduce((accu, pixel) => {
+      if(!(image[pixel.x - departement.min.x] && image[pixel.x - departement.min.x][pixel.y - departement.min.y])){
+        return accu;
+      }
       i++;
       if (
         image[pixel.x - departement.min.x][pixel.y - departement.min.y] != 0 &&
@@ -43,5 +55,44 @@ ${
       };
     }
     return { message: "Image terminée, Bravo à tous et toutes!", pixels: [] };
+  },
+  imageToJson: (config, buffer,channel_log) => {
+    return new Promise((resolve) => {
+      console.log(buffer)
+      getPixels(buffer,"image/png", function (err, pixels) {
+        if (err) {
+          console.error(err);
+          channel_log.send(`error, ${err}`)
+          return;
+        }
+        const jsonResulte = [];
+
+        for (var x = 0; x < pixels.shape[0]; x++) {
+          jsonResulte[x] = [];
+        }
+        console.log(pixels.shape);
+        let i = 0;
+        for (var y = 0; y < pixels.shape[1]; y++) {
+          for (var x = 0; x < pixels.shape[0]; x++) {
+            if (pixels.data[i + 3] === 0) {
+              jsonResulte[x][y] = 0;
+            } else {
+              jsonResulte[x][y] = `#${convertNumberToHex(
+                pixels.data[i]
+              )}${convertNumberToHex(pixels.data[i + 1])}${convertNumberToHex(
+                pixels.data[i + 2]
+              )}`;
+            }
+            i += 4;
+          }
+        }
+        // console.log(jsonResulte);
+        writeFile(
+          `${__dirname}/../image/${config.image}`,
+          JSON.stringify(jsonResulte)
+        );
+        resolve(jsonResulte);
+      });
+    });
   },
 };
