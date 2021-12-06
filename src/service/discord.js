@@ -1,4 +1,5 @@
 const { Client, Intents } = require("discord.js");
+const { saveConfig } = require("./gestion");
 
 const reg = /^.*\[(\d{1,3})[:;/](\d{1,3})].*$/;
 
@@ -28,15 +29,26 @@ module.exports = {
       return x === Number(coordonne[1]) && y === Number(coordonne[2]);
     });
   },
-  cleanChannel: async (channel) => {
-    let messages = await channel.messages.fetch();
-    await Promise.all(
-      messages.map(async (message) => {
-        if(! message.deleted){
-          await message.delete();
-        }
-      })
-    );
+  cleanChannel: async (channel,config) => {
+    if(config.clone){
+      config.channel.image
+      let channelNew = await channel.clone();
+      config.channel.image = channelNew.id;
+      await saveConfig(config);
+      await channel.delete();
+      return channelNew;
+    }else{
+      let messages = await channel.messages.fetch();
+      await Promise.all(
+        messages.map(async (message) => {
+          if(! message.deleted){
+            await message.delete();
+          }
+        })
+      );
+      return channel;
+    }
+
   },
   sendMessageForPixelChange: async (
     listPixel,

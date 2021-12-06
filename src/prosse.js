@@ -4,7 +4,6 @@ const axios = require("axios");
 const discord = require("./service/discord");
 const processEvent = require("./service/processEvent");
 const { getNextPixel, imageToJson } = require("./service/image");
-// const { gestionRole } = require("./service/gestion");
 
 const apiURL = process.env.URL_API;
 processEvent.on("config", async (config) => {
@@ -20,13 +19,13 @@ processEvent.on("config", async (config) => {
     const client = await discord.client;
     const guild = await client.guilds.fetch(config.idGuild);
     const channel_log = await guild.channels.cache.get(config.channel.log);
-    const channel_image = await guild.channels.cache.get(config.channel.image);
+    let channel_image = await guild.channels.cache.get(config.channel.image);
     if (config.image) {
       await channel_log.send(
         "Envoyé une image ici pour mettre a jour l'image utilisé (vous devez étre en mode construction pour faire ça, a par si il y a trés peut de modification)"
       );
       if (channel_image) {
-        await discord.cleanChannel(channel_image);
+        channel_image = await discord.cleanChannel(channel_image,config);
       }
       image = require(`./image/${config.image}`);
 
@@ -43,7 +42,7 @@ processEvent.on("config", async (config) => {
         });
         image = await imageToJson(config, req.data, channel_log);
         await channel_log.send("clean du channel 'Pixels'");
-        await discord.cleanChannel(channel_image);
+        channel_image = await discord.cleanChannel(channel_image,config);
         const { pixels: pixelNeedChange, messageText } = await getNextPixel(
           config,
           image,

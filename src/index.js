@@ -15,7 +15,7 @@ const socketIo = require("./service/socket.io");
           resolve(e);
         });
       });
-      process.send({ type: "config", data: config });
+      process.send({ type: "config", data: {...config,id}, });
       return process;
     })
   );
