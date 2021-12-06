@@ -94,7 +94,7 @@ processEvent.on("config", async (config) => {
                 prefix: config.message,
               },
             });
-          },10000);
+          },15000);
         }
       }
       messageOfPixel = await discord.sendMessageForPixelChange(
@@ -221,7 +221,7 @@ processEvent.on("config", async (config) => {
       }
     })
   } catch (e) {
-    console.error(e);
+    console.error(config.regionNam,config.departementNam,e);
     process.exit(1);
   }
 });
